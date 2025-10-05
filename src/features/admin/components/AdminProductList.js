@@ -28,8 +28,8 @@ import { ITEMS_PER_PAGE } from '../../../app/constants';
 
 const sortOptions = [
   { name: 'Best Rating', sort: 'rating', order: 'desc', current: false },
-  { name: 'Price: Low to High', sort: 'discountPrice', order: 'asc', current: false },
-  { name: 'Price: High to Low', sort: 'discountPrice', order: 'desc', current: false },
+  { name: 'Price: Low to High', sort: 'price', order: 'asc', current: false },
+  { name: 'Price: High to Low', sort: 'price', order: 'desc', current: false },
 ];
 
 function classNames(...classes) {
@@ -204,7 +204,7 @@ export default function AdminProductList() {
                   >
                     Add New Product
                   </Link>
-                </div>
+                </div> 
                 <ProductGrid products={products}></ProductGrid>
               </div>
               {/* Product grid end */}
@@ -342,48 +342,53 @@ function MobileFilter({
     </Transition.Root>
   );
 }
-
 function DesktopFilter({ handleFilter, filters }) {
   return (
-    <form className="hidden lg:block">
+    <form className="hidden lg:block bg-white rounded-lg shadow-md p-6 space-y-6">
       {filters.map((section) => (
         <Disclosure
           as="div"
           key={section.id}
-          className="border-b border-gray-200 py-6"
+          className="border-b border-gray-200 pb-4 last:border-none"
         >
           {({ open }) => (
             <>
-              <h3 className="-my-3 flow-root">
-                <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="font-medium text-gray-900">
+              <h3>
+                <Disclosure.Button
+                  className="flex w-full items-center justify-between text-left group"
+                >
+                  <span className="text-md font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
                     {section.name}
                   </span>
-                  <span className="ml-6 flex items-center">
+                  <span className="ml-4 transition-transform duration-300 ease-in-out transform">
                     {open ? (
-                      <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                      <MinusIcon className="w-5 h-5 text-gray-500 group-hover:text-indigo-500" />
                     ) : (
-                      <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                      <PlusIcon className="w-5 h-5 text-gray-500 group-hover:text-indigo-500" />
                     )}
                   </span>
                 </Disclosure.Button>
               </h3>
-              <Disclosure.Panel className="pt-6">
-                <div className="space-y-4">
+
+              <Disclosure.Panel className="pt-4">
+                <div className="space-y-3">
                   {section.options.map((option, optionIdx) => (
-                    <div key={option.value} className="flex items-center">
+                    <div
+                      key={option.value}
+                      className="flex items-center text-sm"
+                    >
                       <input
                         id={`filter-${section.id}-${optionIdx}`}
                         name={`${section.id}[]`}
-                        defaultValue={option.value}
+                        value={option.value}
                         type="checkbox"
-                        defaultChecked={option.checked}
+                        checked={option.checked}
                         onChange={(e) => handleFilter(e, section, option)}
-                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 transition duration-150"
                       />
                       <label
                         htmlFor={`filter-${section.id}-${optionIdx}`}
-                        className="ml-3 text-sm text-gray-600"
+                        className="ml-3 text-gray-700 cursor-pointer"
                       >
                         {option.label}
                       </label>
@@ -398,6 +403,7 @@ function DesktopFilter({ handleFilter, filters }) {
     </form>
   );
 }
+
 
 function Pagination({ page, setPage, handlePage, totalItems }) {
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
@@ -475,65 +481,72 @@ function Pagination({ page, setPage, handlePage, totalItems }) {
     </div>
   );
 }
-
 function ProductGrid({ products }) {
   return (
-    <div className="bg-white">
-      <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
-        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+    <div className="bg-gray-50 py-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
-            <div key={product.id}>
-              <Link to={`/product-detail/${product.id}`} >
-                <div className="group relative border-solid border-2 p-2 border-gray-200">
-                  <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
-                    <img
-                      src={product.thumbnail}
-                      alt={product.title}
-                      className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                    />
-                  </div>
-                  <div className="mt-4 flex justify-between">
-                    <div>
-                      <h3 className="text-sm text-gray-700">
-                        <div href={product.thumbnail}>
-                          <span
-                            aria-hidden="true"
-                            className="absolute inset-0"
-                          />
-                          {product.title}
-                        </div>
-                      </h3>
-                      <p className="mt-1 text-sm text-gray-500">
-                        <StarIcon className="w-6 h-6 inline"></StarIcon>
-                        <span className=" align-bottom">{product.rating}</span>
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm block font-medium text-gray-900">
-                        
-                        ${ product.price*(1- product.discountPercentage/100)}
-                      </p>
-                      <p className="text-sm block line-through font-medium text-gray-400">
-                        ${product.price}
-                      </p>
-                    </div>
-                  </div>
-                  {product.deleted && (
-                    <div>
-                      <p className="text-sm text-red-400">product deleted</p>
-                    </div>
+            <div
+              key={product.id}
+              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"
+            >
+              <Link to={`/product-detail/${product.id}`}>
+                <div className="relative group overflow-hidden rounded-t-xl">
+                  <img
+                    src={product.thumbnail}
+                    alt={product.title}
+                    loading="lazy"
+                    className="w-full h-60 object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+
+                  {product.stock <= 0 && (
+                    <span className="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded">
+                      Out of Stock
+                    </span>
                   )}
-                  {product.stock<=0 && (
-                  <div>
-                    <p className="text-sm text-red-400">out of stock</p>
+
+                  {product.delete && (
+                    <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                      Deleted
+                    </span>
+                  )}
+                </div>
+
+                <div className="p-4">
+                  <h3 className="text-lg font-medium text-gray-900 truncate">
+                    {product.title}
+                  </h3>
+
+                  <div className="flex items-center mt-2 text-sm text-gray-600">
+                    <StarIcon className="w-5 h-5 text-yellow-400 mr-1" />
+                    {product.rating.toFixed(1)}
                   </div>
-                )}
+
+                  <div className="mt-4">
+                    <p className="text-base font-semibold text-indigo-600">
+                      ${(
+                        product.price *
+                        (1 - product.discountPercentage / 100)
+                      ).toFixed(2)}
+                      <span className="ml-2 text-sm font-medium text-gray-400 line-through">
+                        ${product.price.toFixed(2)}
+                      </span>
+                    </p>
+
+                    {product.discountPercentage > 0 && (
+                      <span className="inline-block mt-1 text-xs font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded">
+                        {product.discountPercentage}% OFF
+                      </span>
+                    )}
+                  </div>
                 </div>
               </Link>
-              <div className="mt-5">
+
+              <div className="px-4 pb-4">
                 <Link
                   to={`/admin/product-form/edit/${product.id}`}
-                  className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="mt-4 inline-block w-full text-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors duration-200"
                 >
                   Edit Product
                 </Link>

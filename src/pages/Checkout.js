@@ -32,7 +32,7 @@ function Checkout() {
   const currentOrder = useSelector(selectCurrentOrder);
 
   const totalAmount = items.reduce(
-    (amount, item) => item.product.discountPrice * item.quantity + amount,
+    (amount, item) => item.product.price*(1-item.product.discountPercentage/100) * item.quantity + amount,
     0
   );
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
@@ -69,6 +69,7 @@ function Checkout() {
         selectedAddress,
         status: 'pending', // other status can be delivered, received.
       };
+      console.log(" order===>>",order)
       dispatch(createOrderAsync(order));
       // need to redirect from here to a new page of order success.
     } else {
@@ -91,6 +92,7 @@ function Checkout() {
       )}
 
       {status === 'loading' ? (
+        <>
         <Grid
           height="80"
           width="80"
@@ -100,7 +102,9 @@ function Checkout() {
           wrapperStyle={{}}
           wrapperClass=""
           visible={true}
-        />
+        /> 
+        <h1>hiiii</h1>
+        </>
       ) : <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3">
@@ -428,7 +432,7 @@ function Checkout() {
                                 </a>
                               </h3>
                               <p className="ml-4">
-                                ${item.product.discountPrice}
+                                ${item.product.price * (1 - item.product.discountPercentage / 100) * item.quantity}
                               </p>
                             </div>
                             <p className="mt-1 text-sm text-gray-500">

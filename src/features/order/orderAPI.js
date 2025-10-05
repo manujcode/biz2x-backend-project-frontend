@@ -6,6 +6,7 @@ export function createOrder(order) {
       headers: { 'content-type': 'application/json' },
     });
     const data = await response.json();
+    console.log("order in api.js==>",data)
     resolve({ data });
   });
 }

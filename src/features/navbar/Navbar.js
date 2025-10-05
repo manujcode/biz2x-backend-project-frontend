@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
@@ -6,10 +6,12 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectItems } from '../cart/cartSlice';
 import { selectLoggedInUser } from '../auth/authSlice';
 import { selectUserInfo } from '../user/userSlice';
+import { ITEMS_PER_PAGE } from '../../app/constants';
+import { fetchProductsByFiltersAsync } from '../product/productSlice';
 
 
 const navigation = [
@@ -31,6 +33,179 @@ function classNames(...classes) {
 function NavBar({ children }) {
   const items = useSelector(selectItems);
   const userInfo = useSelector(selectUserInfo);
+    
+  const [filter,setFilter] = useState({})
+  const handleSearchClick = (obj) => {
+    // const filter = { _sort: option.sort, _order: option.order };
+    console.log(obj)
+    setFilter(obj)
+    // setSort();
+  };
+  const dispatch = useDispatch()
+  const [sort, setSort] = useState({});
+  useEffect(() => {
+    const pagination = { _page: 1, _limit: ITEMS_PER_PAGE };
+    dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }));
+    setSearchResult([])
+  }, [dispatch, filter]);
+
+   const searchProduct =[{ "title": "Wooden Bathroom Sink With Mirrors" },
+   { "title": "Milk" },
+   { "title": "Blue & Black Check Shirt" },
+   { "title": "Red Onions" },
+   { "title": "Green Bell Pepper" },
+   { "title": "Mulberry" },
+   { "title": "Citrus Squeezer Yellow" },
+   { "title": "Tissue Paper Box" },
+   { "title": "Knife" },
+   { "title": "Kitchen Sieve" },
+   { "title": "Potatoes" },
+   { "title": "Men Check Shirt" },
+   { "title": "Brown Leather Belt Watch" },
+   { "title": "Tray" },
+   { "title": "Powder Canister" },
+   { "title": "Black Whisk" },
+   { "title": "Carbon Steel Wok" },
+   { "title": "Rolex Cellini Date Black Dial" },
+   { "title": "Sports Sneakers Off White Red" },
+   { "title": "Juice" },
+   { "title": "Family Tree Photo Frame" },
+   { "title": "Chopping Board" },
+   { "title": "Red Lipstick" },
+   { "title": "Lunch Box" },
+   { "title": "Man Plaid Shirt" },
+   { "title": "Wooden Rolling Pin" },
+   { "title": "Huawei Matebook X Pro" },
+   { "title": "Rolex Datejust" },
+   { "title": "Table Lamp" },
+   { "title": "Bamboo Spatula" },
+   { "title": "Fish Steak" },
+   { "title": "Lemon" },
+   { "title": "Spice Rack" },
+   { "title": "Man Short Sleeve Shirt" },
+   { "title": "Asus Zenbook Pro Dual Screen Laptop" },
+   { "title": "Puma Future Rider Trainers" },
+   { "title": "Plate" },
+   { "title": "Chanel Coco Noir Eau De" },
+   { "title": "Dior J'adore" },
+   { "title": "Electric Stove" },
+   { "title": "Protein Powder" },
+   { "title": "Black Aluminium Cup" },
+   { "title": "Water" },
+   { "title": "House Showpiece Plant" },
+   { "title": "Nike Baseball Cleats" },
+   { "title": "Spoon" },
+   { "title": "Chicken Meat" },
+   { "title": "Green Chili Pepper" },
+   { "title": "Ice Cream" },
+   { "title": "Cat Food" },
+   { "title": "Gucci Bloom Eau de" },
+   { "title": "Annibale Colombo Bed" },
+   { "title": "Slotted Turner" },
+   { "title": "Rolex Submariner Watch" },
+   { "title": "Apple MacBook Pro 14 Inch Space Grey" },
+   { "title": "Fine Mesh Strainer" },
+   { "title": "Glass" },
+   { "title": "Decoration Swing" },
+   { "title": "Plant Pot" },
+   { "title": "Dolce Shine Eau de" },
+   { "title": "Apple" },
+   { "title": "Bedside Table African Cherry" },
+   { "title": "Rolex Cellini Moonphase" },
+   { "title": "Amazon Echo Plus" },
+   { "title": "Silver Pot With Glass Cap" },
+   { "title": "Red Tongs" },
+   { "title": "Eyeshadow Palette with Mirror" },
+   { "title": "Honey Jar" },
+   { "title": "Nescafe Coffee" },
+   { "title": "Cooking Oil" },
+   { "title": "Egg Slicer" },
+   { "title": "Hand Blender" },
+   { "title": "Annibale Colombo Sofa" },
+   { "title": "Grater Black" },
+   { "title": "Soft Drinks" },
+   { "title": "Pan" },
+   { "title": "Microwave Oven" },
+   { "title": "Fork" },
+   { "title": "Rice" },
+   { "title": "Dog Food" },
+   { "title": "Essence Mascara Lash Princess" },
+   { "title": "Mug Tree Stand" },
+   { "title": "Nike Air Jordan 1 Red And Black" },
+   { "title": "Gigabyte Aorus Men Tshirt" },
+   { "title": "Longines Master Collection" },
+   { "title": "Eggs" },
+   { "title": "Calvin Klein CK One" },
+   { "title": "Ice Cube Tray" },
+   { "title": "Beef Steak" },
+   { "title": "Yellow Peeler" },
+   { "title": "Lenovo Yoga 920" },
+   { "title": "Apple Airpods" },
+   { "title": "New DELL XPS 13 9300 Laptop" },
+   { "title": "Knoll Saarinen Executive Conference Chair" },
+   { "title": "Strawberry" },
+   { "title": "Kiwi" },
+   { "title": "Cucumber" },
+   { "title": "Boxed Blender" },
+   { "title": "Red Nail Polish" },
+   { "brand": "Bath Trends" },
+       { "brand": "Fashion Trends" },
+       { "brand": "Urban Chic" },
+       { "brand": "Fashion Timepieces" },
+       { "brand": "Velvet Touch" },
+       { "brand": "Rolex" },
+       { "brand": "Off White" },
+       { "brand": "Chic Cosmetics" },
+       { "brand": "Classic Wear" },
+       { "brand": "Huawei" },
+       { "brand": "Casual Comfort" },
+       { "brand": "Asus" },
+       { "brand": "Puma" },
+       { "brand": "Chanel" },
+       { "brand": "Dior" },
+       { "brand": "Nike" },
+       { "brand": "Gucci" },
+       { "brand": "Annibale Colombo" },
+       { "brand": "Apple" },
+       { "brand": "Dolce & Gabbana" },
+       { "brand": "Furniture Co." },
+       { "brand": "Amazon" },
+       { "brand": "Glamour Beauty" },
+       { "brand": "Essence" },
+       { "brand": "Gigabyte" },
+       { "brand": "Longines" },
+       { "brand": "Calvin Klein" },
+       { "brand": "Lenovo" },
+       { "brand": "Dell" },
+       { "brand": "Knoll" },
+       { "brand": "Nail Couture" },
+       { "category": "furniture" },
+       { "category": "groceries" },
+       { "category": "mens-shirts" },
+       { "category": "kitchen-accessories" },
+       { "category": "mens-watches" },
+       { "category": "beauty" },
+       { "category": "mens-shoes" },
+       { "category": "home-decoration" },
+       { "category": "laptops" },
+       { "category": "fragrances" },
+       { "category": "mobile-accessories" }
+   
+   ]
+   let [searchResult,setSearchResult] =useState([]);
+   function  handleSearch(event) {
+    const query = event.target.value;
+    // Implement your search logic here
+     let Result = searchProduct.filter(product =>
+      product.title?.toLowerCase().includes(query.toLowerCase()) ||
+      product.brand?.toLowerCase().includes(query.toLowerCase()) ||
+      product.category?.toLowerCase().includes(query.toLowerCase())
+    );
+    // if()
+    setSearchResult(Result);
+    // if()
+    console.log('Searching for:', searchResult);
+  }
 
   return (
     <>
@@ -239,10 +414,41 @@ function NavBar({ children }) {
         type="text"
         placeholder="Search for products..."
         className="w-full rounded-full border border-gray-300 bg-gray-50 py-2 pl-4 pr-10 text-gray-700 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-400 outline-none transition"
+        // value={query}
+        onClick={handleSearch}
       />
       <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-600">
         🔍
       </button>
+
+      {/* Suggestions dropdown */}
+      {searchResult.length > 0 && (
+        <ul className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-gray-700 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          {searchResult.map((product, idx) => (
+            <li
+              key={idx}
+              className="cursor-pointer px-4 py-2 hover:bg-indigo-100"
+              onClick={() => {
+                  let obj = null;
+                    if(product.brand){
+                       obj={brand:product.brand}
+                    }
+                    else if(product.category){
+                      obj={category:product.category}
+                    }
+                    else{
+                    obj={title:product.title}
+                    }
+                handleSearchClick(obj)
+                // setQuery(product.title);
+                // setSearchResult([]);
+              }}
+            >
+             <span className="text-sm text-gray-500">{product.brand||product.category||product.title}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   </div>
 </header>

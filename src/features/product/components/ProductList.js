@@ -31,8 +31,8 @@ import { Grid } from 'react-loader-spinner';
 
 const sortOptions = [
   { name: 'Best Rating', sort: 'rating', order: 'desc', current: false },
-  { name: 'Price: Low to High', sort: 'discountPrice', order: 'asc', current: false },
-  { name: 'Price: High to Low', sort: 'discountPrice', order: 'desc', current: false },
+  { name: 'Price: Low to High', sort: 'price', order: 'asc', current: false },
+  { name: 'Price: High to Low', sort: 'price', order: 'desc', current: false },
 ];
 
 function classNames(...classes) {
@@ -82,19 +82,20 @@ export default function ProductList() {
     console.log({ newFilter });
 
     setFilter(newFilter);
+    console.log(filter)
   };
 
-  const handleSort = (e, option) => {
-    const sort = { _sort: option.sort, _order: option.order };
-    console.log({ sort });
-    setSort(sort);
-  };
+  
 
   const handlePage = (page) => {
     console.log({ page });
     setPage(page);
   };
-
+const handleSort = (e, option) => {
+    const sort = { _sort: option.sort, _order: option.order };
+    console.log({ sort });
+    setSort(sort);
+  };
   useEffect(() => {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
     dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }));
@@ -341,45 +342,51 @@ function MobileFilter({
 
 function DesktopFilter({ handleFilter, filters }) {
   return (
-    <form className="hidden lg:block">
+    <form className="hidden lg:block bg-white rounded-lg shadow-md p-6 space-y-6">
       {filters.map((section) => (
         <Disclosure
           as="div"
           key={section.id}
-          className="border-b border-gray-200 py-6"
+          className="border-b border-gray-200 pb-4 last:border-none"
         >
           {({ open }) => (
             <>
-              <h3 className="-my-3 flow-root">
-                <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="font-medium text-gray-900">
+              <h3>
+                <Disclosure.Button
+                  className="flex w-full items-center justify-between text-left group"
+                >
+                  <span className="text-md font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
                     {section.name}
                   </span>
-                  <span className="ml-6 flex items-center">
+                  <span className="ml-4 transition-transform duration-300 ease-in-out transform">
                     {open ? (
-                      <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                      <MinusIcon className="w-5 h-5 text-gray-500 group-hover:text-indigo-500" />
                     ) : (
-                      <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                      <PlusIcon className="w-5 h-5 text-gray-500 group-hover:text-indigo-500" />
                     )}
                   </span>
                 </Disclosure.Button>
               </h3>
-              <Disclosure.Panel className="pt-6">
-                <div className="space-y-4">
+
+              <Disclosure.Panel className="pt-4">
+                <div className="space-y-3">
                   {section.options.map((option, optionIdx) => (
-                    <div key={option.value} className="flex items-center">
+                    <div
+                      key={option.value}
+                      className="flex items-center text-sm"
+                    >
                       <input
                         id={`filter-${section.id}-${optionIdx}`}
                         name={`${section.id}[]`}
-                        defaultValue={option.value}
+                        value={option.value}
                         type="checkbox"
-                        defaultChecked={option.checked}
+                        checked={option.checked}
                         onChange={(e) => handleFilter(e, section, option)}
-                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 transition duration-150"
                       />
                       <label
                         htmlFor={`filter-${section.id}-${optionIdx}`}
-                        className="ml-3 text-sm text-gray-600"
+                        className="ml-3 text-gray-700 cursor-pointer"
                       >
                         {option.label}
                       </label>
@@ -400,64 +407,92 @@ function ProductGrid({ products, status }) {
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-          {status === 'loading' ? (
-            <Grid
-              height="80"
-              width="80"
-              color="rgb(79, 70, 229) "
-              ariaLabel="grid-loading"
-              radius="12.5"
-              wrapperStyle={{}}
-              wrapperClass = ""
-              visible={true}
 
-            />
-          ) : null}
-          {products.map((product) => (
-            <Link to={`/product-detail/${product.id}`} key={product.id}>
-              <div className="group relative border-solid border-2 p-2 border-gray-200">
-                <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
-                  <img
-                    src={product.thumbnail}
-                    alt={product.title}
-                    className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                  />
-                </div>
-                <div className="mt-4 flex justify-between">
-                  <div>
-                    <h3 className="text-sm text-gray-700">
-                      <div href={product.thumbnail}>
-                        <span aria-hidden="true" className="absolute inset-0" />
-                        {product.title}
-                      </div>
+          {status === 'loading' && (
+            <div className="col-span-full flex justify-center py-10">
+              <Grid
+                height="80"
+                width="80"
+                color="rgb(79, 70, 229)"
+                ariaLabel="grid-loading"
+                radius="12.5"
+                wrapperClass=""
+                visible={true}
+              />
+            </div>
+          )}
+
+          {products.map((product) => {
+            const discountedPrice = (product.price * (1 - product.discountPercentage / 100)).toFixed(2);
+            const stars = Array(5).fill(0).map((_, i) => (
+              <StarIcon
+                key={i}
+                className={`w-4 h-4 ${i < Math.round(product.rating) ? 'text-yellow-400' : 'text-gray-300'}`}
+                aria-hidden="true"
+              />
+            ));
+
+            return (
+              <Link to={`/product-detail/${product.id}`} key={product.id} className="group block">
+                <div className="relative border border-gray-200 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
+
+                  {/* Image Container */}
+                <div className="relative w-full overflow-hidden rounded-md aspect-w-1 aspect-h-1 bg-gray-100 lg:aspect-none lg:h-60">
+  <img
+    src={product.thumbnail}
+    alt={product.title}
+    loading="lazy"
+    className="object-cover object-center w-full h-full transition-transform duration-300 group-hover:scale-105"
+  />
+
+  {/* Discount Badge */}
+  {product.discountPercentage > 0 && !product.deleted && product.stock > 0 && (
+    <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded shadow">
+      -{product.discountPercentage}%
+    </div>
+  )}
+
+  {/* Deleted Badge */}
+  {product.deleted && (
+<span className={`absolute top-2 right-2  text-white text-xs font-semibold px-2 py-1 rounded`}>
+      Deleted
+    </span>
+  )}
+
+  {/* Overlay for Deleted or Out of Stock */}
+  {(product.deleted || product.stock <= 0) && (
+    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-md">
+      <p className="text-white text-sm font-semibold uppercase">
+        {product.deleted ? 'Deleted' : 'Out of Stock'}
+      </p>
+    </div>
+  )}
+</div>
+
+
+                  {/* Text Content */}
+                  <div className="mt-4 space-y-2">
+                    <h3 className="text-sm font-semibold text-gray-800 truncate" title={product.title}>
+                      {product.title}
                     </h3>
-                    <p className="mt-1 text-sm text-gray-500">
-                      <StarIcon className="w-6 h-6 inline"></StarIcon>
-                      <span className=" align-bottom">{product.rating}</span>
-                    </p>
+
+                    <div className="flex items-center space-x-1">
+                      {stars}
+                      <span className="text-sm text-gray-600 ml-1">{product.rating.toFixed(1)}</span>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <p className="text-base font-semibold text-gray-900">${discountedPrice}</p>
+                      {product.discountPercentage > 0 && (
+                        <p className="text-sm line-through text-gray-400">${product.price.toFixed(2)}</p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm block font-medium text-gray-900">
-                      ${ product.price*(1- product.discountPercentage/100)}
-                    </p>
-                    <p className="text-sm block line-through font-medium text-gray-400">
-                      ${product.price}
-                    </p>
-                  </div>
+
                 </div>
-                {product.deleted && (
-                  <div>
-                    <p className="text-sm text-red-400">product deleted</p>
-                  </div>
-                )}
-                {product.stock <= 0 && (
-                  <div>
-                    <p className="text-sm text-red-400">out of stock</p>
-                  </div>
-                )}
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>
