@@ -39,7 +39,9 @@ export function loginUser(loginInfo) {
 export function checkAuth() {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await fetch('https://biz2x-backend-project-backend.onrender.com/auth/check');
+      const response = await fetch('https://biz2x-backend-project-backend.onrender.com/auth/check',{
+      credentials: 'include',
+    });
       if (response.ok) {
         const data = await response.json();
         resolve({ data });
