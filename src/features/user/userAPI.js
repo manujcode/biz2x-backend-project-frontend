@@ -1,6 +1,6 @@
 export function fetchLoggedInUserOrders() {
   return new Promise(async (resolve) =>{
-    const response = await fetch('/orders/own/') 
+    const response = await fetch('/orders/user/') 
     const data = await response.json()
     resolve({data})
   }

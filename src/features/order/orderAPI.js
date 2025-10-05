@@ -1,12 +1,12 @@
 export function createOrder(order) {
   return new Promise(async (resolve) => {
+    console.log("order in api.js==>",order)
     const response = await fetch('/orders', {
       method: 'POST',
       body: JSON.stringify(order),
       headers: { 'content-type': 'application/json' },
     });
     const data = await response.json();
-    console.log("order in api.js==>",data)
     resolve({ data });
   });
 }

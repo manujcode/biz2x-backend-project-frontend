@@ -61,12 +61,12 @@ function Checkout() {
   const handleOrder = (e) => {
     if (selectedAddress && paymentMethod) {
       const order = {
-        items,
+        item:items,
         totalAmount,
         totalItems,
         user: user.id,
         paymentMethod,
-        selectedAddress,
+        selectAddress:selectedAddress,
         status: 'pending', // other status can be delivered, received.
       };
       console.log(" order===>>",order)

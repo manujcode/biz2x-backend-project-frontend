@@ -415,7 +415,7 @@ function NavBar({ children }) {
         placeholder="Search for products..."
         className="w-full rounded-full border border-gray-300 bg-gray-50 py-2 pl-4 pr-10 text-gray-700 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-400 outline-none transition"
         // value={query}
-        onClick={handleSearch}
+        onChange={handleSearch}
       />
       <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-600">
         🔍
