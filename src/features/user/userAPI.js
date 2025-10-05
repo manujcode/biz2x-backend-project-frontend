@@ -2,7 +2,7 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://biz2x-backend-pr
 
 export async function fetchLoggedInUserOrders() {
   try {
-    const response = await fetch(`http://localhost:8080/orders/user/`, {
+    const response = await fetch(`${BASE_URL}/orders/user/`, {
       method: 'GET',
       credentials: 'include',
     });
