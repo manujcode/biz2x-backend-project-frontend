@@ -446,11 +446,7 @@ function ProductGrid({ products, status }) {
   />
 
   {/* Discount Badge */}
-  {product.discountPercentage > 0 && !product.deleted && product.stock > 0 && (
-    <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded shadow">
-      -{product.discountPercentage}%
-    </div>
-  )}
+ 
 
   {/* Deleted Badge */}
   {product.deleted && (
