@@ -1,6 +1,6 @@
 export function addToCart(item) {
   return new Promise(async (resolve) => {
-    const response = await fetch('/cart', {
+    const response = await fetch('https://biz2x-backend-project-backend.onrender.com/cart', {
       method: 'POST',
       body: JSON.stringify(item),
       headers: { 'content-type': 'application/json' },
@@ -20,7 +20,7 @@ export function fetchItemsByUserId() {
 
 export function updateCart(update) {
   return new Promise(async (resolve) => {
-    const response = await fetch('/cart/' + update.id, {
+    const response = await fetch('https://biz2x-backend-project-backend.onrender.com/cart/' + update.id, {
       method: 'PATCH',
       body: JSON.stringify(update),
       headers: { 'content-type': 'application/json' },
@@ -32,7 +32,7 @@ export function updateCart(update) {
 
 export function deleteItemFromCart(itemId) {
   return new Promise(async (resolve) => {
-    const response = await fetch('/cart/' + itemId, {
+    const response = await fetch('https://biz2x-backend-project-backend.onrender.com/cart/' + itemId, {
       method: 'DELETE',
       headers: { 'content-type': 'application/json' },
     });
