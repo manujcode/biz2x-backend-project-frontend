@@ -5,6 +5,7 @@ export function createUser(userData) {
       method: 'POST',
       body: JSON.stringify(userData),
       headers: { 'content-type': 'application/json' },
+      credentials: 'include',
     });
     const data = await response.json();
     resolve({ data });
@@ -18,6 +19,8 @@ export function loginUser(loginInfo) {
         method: 'POST',
         body: JSON.stringify(loginInfo),
         headers: { 'content-type': 'application/json' },
+        credentials:"include"
+
       });
       if (response.ok) {
         const data = await response.json();
@@ -77,6 +80,7 @@ export function resetPasswordRequest(email) {
         method: 'POST',
         body: JSON.stringify({email}),
         headers: { 'content-type': 'application/json' },
+        credentials:"include"
       });
       if (response.ok) {
         const data = await response.json();
@@ -99,6 +103,7 @@ export function resetPassword(data) {
         method: 'POST',
         body: JSON.stringify(data),
         headers: { 'content-type': 'application/json' },
+        credentials:"include"
       });
       if (response.ok) {
         const data = await response.json();

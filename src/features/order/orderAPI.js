@@ -1,10 +1,13 @@
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://biz2x-backend-project-backend.onrender.com';
+
 export function createOrder(order) {
   return new Promise(async (resolve) => {
     console.log("order in api.js==>",order)
-    const response = await fetch('https://biz2x-backend-project-backend.onrender.com/orders', {
+    const response = await fetch(`${BASE_URL}/orders`, {
       method: 'POST',
       body: JSON.stringify(order),
       headers: { 'content-type': 'application/json' },
+      credentials: 'include',
     });
     const data = await response.json();
     resolve({ data });
@@ -13,10 +16,11 @@ export function createOrder(order) {
 
 export function updateOrder(order) {
   return new Promise(async (resolve) => {
-    const response = await fetch('https://biz2x-backend-project-backend.onrender.com/orders/'+order.id, {
+    const response = await fetch(`${BASE_URL}/orders/`+order.id, {
       method: 'PATCH',
       body: JSON.stringify(order),
       headers: { 'content-type': 'application/json' },
+      credentials: 'include',
     });
     const data = await response.json();
     resolve({ data });
@@ -34,9 +38,9 @@ export function fetchAllOrders(sort, pagination) {
   }
 
   return new Promise(async (resolve) => {
-    const response = await fetch(
-      'https://biz2x-backend-project-backend.onrender.com/orders?' + queryString
-    );
+    const response = await fetch(`${BASE_URL}/orders?` + queryString, {
+      credentials: 'include',
+    });
     const data = await response.json();
     const totalOrders = await response.headers.get('X-Total-Count');
     resolve({ data: { orders: data, totalOrders: +totalOrders } });

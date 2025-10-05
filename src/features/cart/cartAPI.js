@@ -1,9 +1,12 @@
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://biz2x-backend-project-backend.onrender.com';
+
 export function addToCart(item) {
   return new Promise(async (resolve) => {
-    const response = await fetch('https://biz2x-backend-project-backend.onrender.com/cart', {
+    const response = await fetch(`${BASE_URL}/cart`, {
       method: 'POST',
       body: JSON.stringify(item),
       headers: { 'content-type': 'application/json' },
+      credentials: 'include',
     });
     const data = await response.json();
     resolve({ data });
@@ -12,7 +15,9 @@ export function addToCart(item) {
 
 export function fetchItemsByUserId() {
   return new Promise(async (resolve) => {
-    const response = await fetch('/cart');
+    const response = await fetch(`${BASE_URL}/cart`, {
+      credentials: 'include',
+    });
     const data = await response.json();
     resolve({ data });
   });
@@ -20,10 +25,11 @@ export function fetchItemsByUserId() {
 
 export function updateCart(update) {
   return new Promise(async (resolve) => {
-    const response = await fetch('https://biz2x-backend-project-backend.onrender.com/cart/' + update.id, {
+    const response = await fetch(`${BASE_URL}/cart/` + update.id, {
       method: 'PATCH',
       body: JSON.stringify(update),
       headers: { 'content-type': 'application/json' },
+      credentials: 'include',
     });
     const data = await response.json();
     resolve({ data });
@@ -32,9 +38,10 @@ export function updateCart(update) {
 
 export function deleteItemFromCart(itemId) {
   return new Promise(async (resolve) => {
-    const response = await fetch('https://biz2x-backend-project-backend.onrender.com/cart/' + itemId, {
+    const response = await fetch(`${BASE_URL}/cart/` + itemId, {
       method: 'DELETE',
       headers: { 'content-type': 'application/json' },
+      credentials: 'include',
     });
     const data = await response.json();
     resolve({ data: { id: itemId } });

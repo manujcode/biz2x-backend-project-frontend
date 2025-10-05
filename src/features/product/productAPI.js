@@ -1,7 +1,11 @@
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://biz2x-backend-project-backend.onrender.com';
+
 export function fetchProductById(id) {
   return new Promise(async (resolve) => {
-    const response = await fetch('https://biz2x-backend-project-backend.onrender.com/products/' + id);
+    const response = await fetch(`${BASE_URL}/products/` + id, {
+      credentials: 'include',
+    });
     const data = await response.json();
     resolve({ data });
   });
@@ -9,10 +13,11 @@ export function fetchProductById(id) {
 
 export function createProduct(product) {
   return new Promise(async (resolve) => {
-    const response = await fetch('https://biz2x-backend-project-backend.onrender.com/products/', {
+    const response = await fetch(`${BASE_URL}/products/`, {
       method: 'POST',
       body: JSON.stringify(product),
       headers: { 'content-type': 'application/json' },
+      credentials: 'include',
     });
     const data = await response.json();
     resolve({ data });
@@ -22,11 +27,12 @@ export function createProduct(product) {
 export function updateProduct(update) {
   return new Promise(async (resolve) => {
     const response = await fetch(
-      'https://biz2x-backend-project-backend.onrender.com/products/' + update.id,
+      `${BASE_URL}/products/` + update.id,
       { 
         method: 'PATCH',
         body: JSON.stringify(update),
         headers: { 'content-type': 'application/json' },
+        credentials: 'include',
       }
     );
     const data = await response.json();
@@ -59,7 +65,9 @@ export function fetchProductsByFilters(filter, sort, pagination, admin) {
 
   return new Promise(async (resolve) => {
     const response = await fetch(
-      'https://biz2x-backend-project-backend.onrender.com/products?' + queryString
+      `${BASE_URL}/products?` + queryString, {
+      credentials: 'include',
+    }
     );
     const data = await response.json();
     const totalItems = await response.headers.get('X-Total-Count');
@@ -69,7 +77,9 @@ export function fetchProductsByFilters(filter, sort, pagination, admin) {
 
 export function fetchCategories() {
   return new Promise(async (resolve) => {
-    const response = await fetch('https://biz2x-backend-project-backend.onrender.com/categories');
+    const response = await fetch(`${BASE_URL}/categories`, {
+      credentials: 'include',
+    });
     const data = await response.json();
     resolve({ data });
   });
@@ -77,7 +87,9 @@ export function fetchCategories() {
 
 export function fetchBrands() {
   return new Promise(async (resolve) => {
-    const response = await fetch('https://biz2x-backend-project-backend.onrender.com/brands');
+    const response = await fetch(`${BASE_URL}/brands`, {
+      credentials: 'include',
+    });
     const data = await response.json();
     resolve({ data });
   });
